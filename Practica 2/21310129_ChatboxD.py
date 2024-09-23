@@ -31,7 +31,7 @@ def chat():
     response = responses.get(user_input)
 
     if response is None:
-        response = "Todo eso te dijo el arbol mi amor?. ¿Que mas te dijo? (Responde 'sí' o 'no')"
+        response = "Todo eso te lo dijo el arbol mi amor?"
         # Pregunta para agregar conocimiento nuevo
         knowledge_base.append(user_input)  # Aquí se almacena el nuevo conocimiento
 
