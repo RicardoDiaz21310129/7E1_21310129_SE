@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Sencillo</title>
+</head>
+<body>
+    <h1>Chat Sencillo</h1>
+    <form id="chat-form">
+        <input type="text" id="user-input" placeholder="Escribe aquí...">
+        <button type="submit">Enviar</button>
+    </form>
+    <div id="chat-output"></div>
+
+    <script>
+        document.getElementById('chat-form').onsubmit = function(e) {
+            e.preventDefault();
+            let userInput = document.getElementById('user-input').value;
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({ 'user_input': userInput })
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('chat-output').innerHTML += `<p><strong>Tú:</strong> ${userInput}</p>`;
+                document.getElementById('chat-output').innerHTML += `<p><strong>Bot:</strong> ${data}</p>`;
+                document.getElementById('user-input').value = '';
+            });
+        };
+    </script>
+</body>
+</html>
