@@ -1,0 +1,124 @@
+"""
+Sistemas Expertos
+Alumno: Edwin Ricardo Diaz Valenzuela 
+Registro: 21310129
+Grupo: 7E1
+Profesor: Mauricio Alejandro Cabrera Arellano
+"""
+
+import random
+
+# Datos del juego
+personajes = ["El Capitán Sin Rastro", "La Pirata Sombría", "El Navegante Fantasma", "El Cazador de Sirenas", "La Reina del Mar"]
+locaciones = ["Isla Perdida", "Caverna Submarina", "Barco Fantasma", "Arrecife Tenebroso", "Faro Abandonado"]
+armas = ["Sable Oxidado", "Mapa Envenenado", "Cañón Desgarrador", "Ancla de Hierro", "Tridente Misterioso"]
+
+# Historias definidas con pistas ambiguas
+historias = {
+    0: (
+        "En una noche oscura, los cinco personajes se reunieron alrededor de una fogata en la Isla Perdida. "
+        "Mientras discutían los secretos del tesoro, un grito resonó en el aire. El Navegante Fantasma había desaparecido misteriosamente. "
+        "La Pirata Sombría mencionó haber visto al Cazador de Sirenas con un objeto filoso, mientras El Capitán Sin Rastro "
+        "intentaba calmar las sospechas. La Reina del Mar aseguró haber visto un mapa envenenado junto al lugar del grito."
+    ),
+    1: (
+        "Bajo la luna espectral, los personajes se encontraban en el Faro Abandonado, tratando de invocar a un antiguo espíritu. "
+        "De repente, un estruendo interrumpió el ritual, y La Pirata Sombría fue hallada inconsciente. "
+        "El Capitán Sin Rastro miró al Cazador de Sirenas, quien sostenía un tridente, mientras la Reina del Mar "
+        "reía nerviosamente y murmuraba sobre un mapa envenenado que había traído. "
+        "Las miradas se cruzaron, y la tensión aumentó."
+    ),
+    2: (
+        "En el Barco Fantasma, envueltos en una densa niebla, los cinco personajes se embarcaron en una peligrosa misión. "
+        "Un grito desgarrador se escuchó cuando el Cazador de Sirenas cayó al suelo. "
+        "La Reina del Mar mencionó haber visto a la Pirata Sombría con un ancla de hierro. "
+        "El Capitán Sin Rastro, a su vez, negó haber tenido algo que ver, mientras el eco de una espada resonaba en la oscuridad."
+    ),
+    3: (
+        "En la Caverna Submarina, donde la oscuridad y el misterio reinaban, los personajes estaban reunidos. "
+        "De repente, un grito rompió el silencio. El Navegante Fantasma había desaparecido, dejando solo su brújula rota. "
+        "La Reina del Mar murmuró sobre el uso de un cañón desgarrador. "
+        "El Capitán Sin Rastro intentó defenderse, pero el ambiente estaba lleno de sospecha."
+    ),
+    4: (
+        "Cerca de un arrecife peligroso, bajo la amenaza de una tormenta, los cinco se encontraron para decidir su próximo paso. "
+        "Un grito abrupto dejó a todos sin aliento. El Cazador de Sirenas estaba herido. "
+        "La Pirata Sombría, cercana a la escena, fue acusada de inmediato por el Navegante Fantasma, quien tenía sus propios secretos. "
+        "Un tridente apareció entre las sombras, sembrando más dudas."
+    )
+}
+
+# Elegir aleatoriamente un índice de la historia
+index = random.randint(0, 4)
+culpable_idx = index
+arma_idx = index
+locacion_idx = index
+
+# Determinar la historia basada en el índice
+historia = historias.get(index)
+
+# Introducción
+print("¡Bienvenido al juego de misterio en alta mar!")
+print("Un crimen ha ocurrido en medio de una aventura, y tú eres el investigador encargado de resolverlo.")
+print("A continuación, se te dará una historia que contiene pistas sobre quién es el culpable, con qué arma y en qué locación.\n")
+
+# Mostrar la historia completa
+print(historia)
+
+# Pistas finales
+print("\nPistas finales:")
+print(f"El culpable es uno de estos personajes: {', '.join(personajes)}.")
+print(f"El arma utilizada es una de estas: {', '.join(armas)}.")
+print(f"La locación del crimen es uno de estos lugares: {', '.join(locaciones)}.")
+
+print("\n¡Buena suerte resolviendo el misterio!\n")
+
+# Ciclo del juego
+while True:
+    # Pedir al jugador que adivine el culpable
+    print("\nOpciones de personajes:")
+    for idx, personaje in enumerate(personajes):
+        print(f"{idx + 1}. {personaje}")
+    culpable_adivinado = input("¿Quién crees que es el culpable? (Ingresa el número): ")
+
+    # Pedir al jugador que adivine el arma
+    print("\nOpciones de armas:")
+    for idx, arma in enumerate(armas):
+        print(f"{idx + 1}. {arma}")
+    arma_adivinada = input("¿Qué arma crees que se utilizó? (Ingresa el número): ")
+
+    # Pedir al jugador que adivine la locación
+    print("\nOpciones de locaciones:")
+    for idx, locacion in enumerate(locaciones):
+        print(f"{idx + 1}. {locacion}")
+    locacion_adivinada = input("¿Qué locación crees que se utilizó? (Ingresa el número): ")
+
+    # Convertir las respuestas a índices
+    try:
+        culpable_adivinado = int(culpable_adivinado) - 1
+        arma_adivinada = int(arma_adivinada) - 1
+        locacion_adivinada = int(locacion_adivinada) - 1
+
+        # Resultados finales
+        print("\n¡Resultados finales!")
+        print(f"Culpable: {personajes[culpable_idx]}")
+        print(f"Arma: {armas[arma_idx]}")
+        print(f"Locación: {locaciones[locacion_idx]}")
+        print(f"Historia: {historia}")
+
+        # Evaluar la respuesta del jugador
+        if (culpable_adivinado == culpable_idx and
+            arma_adivinada == arma_idx and
+            locacion_adivinada == locacion_idx):
+            print("¡Felicidades! Has resuelto el misterio correctamente.")
+        else:
+            print("Lo siento, no has acertado. Intenta de nuevo.")
+
+    except (ValueError, IndexError):
+        print("Entrada inválida. Por favor, ingresa un número válido.")
+
+    # Preguntar al jugador si quiere jugar de nuevo
+    jugar_nuevamente = input("\n¿Quieres jugar de nuevo? (s/n): ").strip().lower()
+    if jugar_nuevamente != 's':
+        print("Gracias por jugar. ¡Hasta la próxima!")
+        break

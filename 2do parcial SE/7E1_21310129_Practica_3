@@ -1,0 +1,110 @@
+"""
+Sistemas Expertos
+Alumno: Edwin Ricardo Diaz Valenzuela
+Registro: 21310129
+Grupo: 7E1
+Profesor: Mauricio Alejandro Cabrera Arellano
+"""
+import json
+import os
+
+class Akinator:
+    def __init__(self):
+        self.questions = [
+            "1.¿Es un instrumento de cuerdas?",
+            "2.¿Es un instrumento de viento?",
+            "3.¿Es un instrumento de percusión?",
+            "4.¿Se toca con las manos?",
+            "5.¿Requiere una boquilla?",
+            "6.¿Es común en una orquesta?",
+            "7.¿Es un instrumento de teclas?",
+            "8.¿Se usa en la música clásica?",
+            "9.¿Es eléctrico?",
+            "10.¿Es portátil?"
+        ]
+        # Cargar instrumentos al iniciar el programa
+        self.music = self.load_instruments()
+
+    def load_instruments(self):
+        # Cargar instrumentos desde un archivo JSON si existe
+        if os.path.exists("instrumentos.json"):
+            with open("instrumentos.json", "r") as file:
+                try:
+                    return json.load(file)
+                except json.JSONDecodeError:
+                    print("Error en el archivo JSON. Usando datos predeterminados.")
+                    return self.default_instruments()
+        else:
+            # Si el archivo no existe, crear datos predeterminados
+            return self.default_instruments()
+
+    def save_instruments(self):
+        # Guardar instrumentos en un archivo JSON
+        with open("instrumentos.json", "w") as file:
+            json.dump(self.music, file)
+
+    def default_instruments(self):
+        # Datos predeterminados para iniciar si no hay archivo
+        return {
+            "guitarra": ["si", "no", "no", "si", "no", "no", "no", "si", "tal vez", "si"],
+            "piano": ["no", "no", "no", "si", "no", "si", "si", "si", "tal vez", "no"],
+            "trompeta": ["no", "si", "no", "si", "si", "si", "no", "si", "no", "si"],
+            "violín": ["si", "no", "no", "si", "no", "si", "no", "si", "tal vez", "si"],
+            "batería": ["no", "no", "si", "si", "no", "no", "no", "no", "tal vez", "no"],
+            "flauta": ["no", "si", "no", "si", "no", "si", "no", "si", "no", "si"],
+            "saxofón": ["no", "si", "no", "si", "si", "no", "no", "tal vez", "no", "si"],
+            "arpa": ["si", "no", "no", "si", "no", "tal vez", "no", "si", "no", "no"],
+            "teclado": ["no", "no", "no", "si", "no", "no", "si", "si", "si", "si"],
+            "acordeón": ["no", "si", "no", "si", "no", "no", "si", "no", "tal vez", "si"],
+        }
+
+    def ask_questions(self):
+        answers = []
+        for question in self.questions:
+            while True:
+                answer = input(question + " (si/no/tal vez): ").strip().lower()
+                if answer in ["si", "no", "tal vez"]:
+                    answers.append(answer)
+                    break
+                else:
+                    print("Por favor, responde solo con 'si', 'no' o 'tal vez'.")
+        return answers
+
+    def guess_music(self, answers):
+        # Normalizar las respuestas
+        normalized_answers = ["si" if ans == "si" else "no" if ans == "no" else "tal vez" for ans in answers]
+        for music, music_answers in self.music.items():
+            if music_answers == normalized_answers:
+                return music
+        return None  # Devuelve None si no encuentra coincidencias
+
+    def ask_additional_questions(self):
+        print("No puedo adivinar. ¿Puedes ayudarme a aprender?")
+        new_music = input("¿Cuál es el instrumento en el que pensabas? ").strip().lower()
+        new_answers = []
+        for question in self.questions:
+            while True:
+                answer = input(question + " (si/no/tal vez): ").strip().lower()
+                if answer in ["si", "no", "tal vez"]:
+                    new_answers.append(answer)
+                    break
+                else:
+                    print("Por favor, responde solo con 'si', 'no' o 'tal vez'.")
+        # Agregar el nuevo instrumento y guardar
+        self.music[new_music] = new_answers
+        self.save_instruments()
+        print(f"He aprendido sobre el {new_music} y lo he guardado.")
+
+    def play(self):
+        print("¡Piensa en un instrumento y yo intentaré adivinarlo!")
+        answers = self.ask_questions()
+        result = self.guess_music(answers)
+        if result:
+            print("Creo que el instrumento en el que estás pensando es:", result)
+        else:
+            self.ask_additional_questions()
+
+if __name__ == "__main__":
+    game = Akinator()
+    game.play()
+
