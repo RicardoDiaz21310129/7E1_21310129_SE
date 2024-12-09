@@ -1,0 +1,52 @@
+import sqlite3
+
+# Crear y conectar a la base de datos
+conn = sqlite3.connect('monster_hunter.db')  # Crea el archivo 'monster_hunter.db' en tu directorio actual
+cursor = conn.cursor()
+
+# Crear la tabla Monsters
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Monsters (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    type TEXT NOT NULL,
+    weakness TEXT NOT NULL,
+    resistance TEXT NOT NULL
+)
+''')
+
+# Insertar datos de monstruos
+data = [
+    ('Rathalos', 'Fuego', 'Agua', 'Fuego'),
+    ('Zinogre', 'Trueno', 'Hielo', 'Trueno'),
+    ('Anjanath', 'Fuego', 'Agua', 'Fuego'),
+    ('Nergigante', 'Dragón', 'Rayo', 'Dragón'),
+    ('Barioth', 'Hielo', 'Fuego', 'Hielo'),
+    ('Rathian', 'Veneno/Fuego', 'Dragón', 'Fuego'),
+    ('Tigrex', 'Bestia Voladora', 'Trueno', 'Hielo'),
+    ('Diablos', 'Tierra', 'Hielo', 'Fuego'),
+    ('Kushala Daora', 'Viento', 'Trueno', 'Agua'),
+    ('Teostra', 'Fuego/Explosivo', 'Agua', 'Fuego'),
+    ('Legiana', 'Hielo', 'Trueno', 'Hielo'),
+    ('Pukei-Pukei', 'Veneno', 'Rayo', 'Agua'),
+    ('Tobi-Kadachi', 'Trueno', 'Agua', 'Rayo'),
+    ('Kirin', 'Trueno', 'Fuego', 'Rayo'),
+    ('Velkhana', 'Hielo', 'Fuego', 'Hielo'),
+    ('Brachydios', 'Explosivo', 'Agua', 'Explosión'),
+    ('Glavenus', 'Fuego', 'Agua', 'Fuego'),
+    ('Alatreon', 'Dragón/Elemental', 'Depende del estado', 'Fuego/Hielo'),
+    ('Rajang', 'Trueno', 'Hielo', 'Trueno'),
+    ('Bazelgeuse', 'Explosivo', 'Hielo', 'Fuego')
+]
+
+# Insertar los datos en la tabla
+cursor.executemany('''
+INSERT INTO Monsters (name, type, weakness, resistance) 
+VALUES (?, ?, ?, ?)
+''', data)
+
+# Confirmar los cambios y cerrar la conexión
+conn.commit()
+conn.close()
+
+print("Base de datos 'monster_hunter.db' creada exitosamente con los datos.")
